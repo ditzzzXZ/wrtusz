@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Biru Senja — Mulai Membaca</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link
+  href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@500;700;900&family=Poppins:wght@400;500;600;700&display=swap"
+  rel="stylesheet"
+/>
+<style>
+  :root {
+    --bg-deep: #050b1f;
+    --bg-mid: #0b1b4d;
+    --bg-end: #15307a;
+    --accent: #2ec4ff;
+    --accent-glow: #7cf0ff;
+    --accent-secondary: #5c7cfa;
+    --text-light: #f0f8ff;
+    --text-muted: #9fb8e8;
+  }
+
+  * { box-sizing: border-box; }
+
+  html, body {
+    margin: 0;
+    min-height: 100vh;
+    background: var(--bg-deep);
+    color: var(--text-light);
+    font-family: "Poppins", sans-serif;
+    overflow-x: hidden;
+  }
+
+  .bg-aurora {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    background:
+      radial-gradient(circle at 20% 20%, rgba(46, 196, 255, 0.25), transparent 50%),
+      radial-gradient(circle at 80% 30%, rgba(92, 124, 250, 0.25), transparent 55%),
+      radial-gradient(circle at 50% 90%, rgba(124, 240, 255, 0.15), transparent 60%),
+      linear-gradient(160deg, var(--bg-deep), var(--bg-mid) 50%, var(--bg-end));
+    background-size: 200% 200%;
+    animation: auroraShift 18s ease-in-out infinite;
+  }
+
+  @keyframes auroraShift {
+    0%, 100% { background-position: 0% 0%; }
+    50% { background-position: 100% 100%; }
+  }
+
+  .particles { position: fixed; inset: 0; z-index: 1; pointer-events: none; }
+
+  .particle {
+    position: absolute;
+    bottom: -10px;
+    border-radius: 50%;
+    background: var(--accent-glow);
+    opacity: 0.7;
+    box-shadow: 0 0 6px var(--accent-glow);
+    animation: floatUp linear infinite;
+  }
+
+  @keyframes floatUp {
+    0% { transform: translateY(0) translateX(0); opacity: 0; }
+    10% { opacity: 0.8; }
+    90% { opacity: 0.4; }
+    100% { transform: translateY(-110vh) translateX(20px); opacity: 0; }
+  }
+
+  .iris-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    background: var(--bg-deep);
+    clip-path: circle(150% at 50% 50%);
+    transition: clip-path 0.9s cubic-bezier(0.76, 0, 0.24, 1);
+    pointer-events: none;
+  }
+
+  .iris-overlay.iris-closing {
+    clip-path: circle(0% at 50% 50%);
+    pointer-events: all;
+  }
+
+  .hero {
+    position: relative;
+    z-index: 2;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 6vh 1.5rem;
+    gap: 0.7rem;
+  }
+
+  .eyebrow {
+    letter-spacing: 0.28em;
+    font-size: 0.7rem;
+    color: var(--accent-glow);
+    text-transform: uppercase;
+    margin: 0;
+    opacity: 0.85;
+  }
+
+  .video-frame {
+    position: relative;
+    width: min(360px, 82vw);
+    border-radius: 24px;
+    isolation: isolate;
+    margin: 1rem 0;
+  }
+
+  .video-frame::before {
+    content: "";
+    position: absolute;
+    inset: -4px;
+    border-radius: 26px;
+    background: conic-gradient(
+      from 0deg,
+      var(--accent),
+      var(--accent-secondary),
+      var(--accent-glow),
+      var(--accent)
+    );
+    filter: blur(14px);
+    opacity: 0.7;
+    z-index: -1;
+    animation: spin 6s linear infinite;
+  }
+
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  .hero-video {
+    width: 100%;
+    display: block;
+    border-radius: 20px;
+    border: 2px solid rgba(255, 255, 255, 0.25);
+    box-shadow: 0 0 40px rgba(46, 196, 255, 0.35);
+    background: #000;
+  }
+
+  .title {
+    font-family: "Zen Maru Gothic", sans-serif;
+    font-weight: 900;
+    font-size: clamp(2.2rem, 7vw, 3.4rem);
+    margin: 0.2rem 0;
+    background: linear-gradient(90deg, var(--text-light), var(--accent-glow), var(--accent));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  .subtitle {
+    font-size: 0.95rem;
+    color: var(--text-muted);
+    margin: 0 0 0.5rem;
+    max-width: 320px;
+  }
+
+  .start-btn {
+    margin-top: 0.8rem;
+    padding: 0.9rem 2.4rem;
+    border: none;
+    border-radius: 999px;
+    font-family: "Poppins", sans-serif;
+    font-weight: 600;
+    font-size: 1rem;
+    color: var(--bg-deep);
+    background: linear-gradient(90deg, var(--accent-glow), var(--accent));
+    cursor: pointer;
+    box-shadow: 0 0 25px rgba(46, 196, 255, 0.5);
+    transition: transform 0.25s, box-shadow 0.25s;
+  }
+
+  .start-btn:hover {
+    transform: translateY(-2px) scale(1.03);
+    box-shadow: 0 0 40px rgba(124, 240, 255, 0.7);
+  }
+
+  .start-btn:active { transform: translateY(0) scale(0.98); }
+
+  .start-btn:focus-visible {
+    outline: 3px solid var(--accent-glow);
+    outline-offset: 3px;
+  }
+
+  .hint {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    opacity: 0.7;
+    margin-top: 0.4rem;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .bg-aurora, .video-frame::before, .particle { animation: none !important; }
+  }
+</style>
+</head>
+<body>
+  <div class="iris-overlay" id="irisOverlay"></div>
+  <div class="bg-aurora"></div>
+  <div class="particles" id="particles"></div>
+
+  <main class="hero">
+    <p class="eyebrow">Light Novel Online</p>
+
+    <div class="video-frame">
+      <video
+        class="hero-video"
+        src="https://jrzsruvr6oysgggd.public.blob.vercel-storage.com/vids/vidieo-gif-play.mp4"
+        autoplay
+        muted
+        loop
+        playsinline
+      ></video>
+    </div>
+
+    <h1 class="title">Biru Senja</h1>
+    <p class="subtitle">Kisah Kita, dari Bangku SMA hingga Selamanya</p>
+
+    <button class="start-btn" id="startBtn">Mulai Membaca</button>
+    <p class="hint">12 Episode &middot; Tamat</p>
+  </main>
+
+  <script src="book.js"></script>
+</body>
+</html>

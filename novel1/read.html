@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Biru Senja — Membaca</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link
+  href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@500;700;900&family=Poppins:wght@400;500;600;700&display=swap"
+  rel="stylesheet"
+/>
+<style>
+  :root {
+    --bg-deep: #050b1f;
+    --bg-mid: #0b1b4d;
+    --bg-end: #15307a;
+    --accent: #2ec4ff;
+    --accent-glow: #7cf0ff;
+    --accent-secondary: #5c7cfa;
+    --text-light: #f0f8ff;
+    --text-muted: #9fb8e8;
+  }
+
+  * { box-sizing: border-box; }
+
+  html, body {
+    margin: 0;
+    min-height: 100vh;
+    background: var(--bg-deep);
+    color: var(--text-light);
+    font-family: "Poppins", sans-serif;
+  }
+
+  .bg-aurora {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    background:
+      radial-gradient(circle at 20% 10%, rgba(46, 196, 255, 0.18), transparent 50%),
+      radial-gradient(circle at 85% 20%, rgba(92, 124, 250, 0.18), transparent 55%),
+      radial-gradient(circle at 50% 100%, rgba(124, 240, 255, 0.12), transparent 60%),
+      linear-gradient(160deg, var(--bg-deep), var(--bg-mid) 55%, var(--bg-end));
+    background-size: 200% 200%;
+    animation: auroraShift 22s ease-in-out infinite;
+  }
+
+  @keyframes auroraShift {
+    0%, 100% { background-position: 0% 0%; }
+    50% { background-position: 100% 100%; }
+  }
+
+  .particles { position: fixed; inset: 0; z-index: 1; pointer-events: none; }
+
+  .particle {
+    position: absolute;
+    bottom: -10px;
+    border-radius: 50%;
+    background: var(--accent-glow);
+    opacity: 0.5;
+    box-shadow: 0 0 6px var(--accent-glow);
+    animation: floatUp linear infinite;
+  }
+
+  @keyframes floatUp {
+    0% { transform: translateY(0) translateX(0); opacity: 0; }
+    10% { opacity: 0.6; }
+    90% { opacity: 0.3; }
+    100% { transform: translateY(-110vh) translateX(20px); opacity: 0; }
+  }
+
+  .iris-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    background: var(--bg-deep);
+    clip-path: circle(0% at 50% 50%);
+    transition: clip-path 0.9s cubic-bezier(0.76, 0, 0.24, 1);
+    pointer-events: none;
+  }
+
+  .iris-overlay.iris-open { clip-path: circle(150% at 50% 50%); }
+
+  .top-bar {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 40;
+    display: flex;
+    align-items: center;
+    padding: 0.9rem 1.2rem;
+    background: rgba(5, 11, 31, 0.55);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid rgba(124, 240, 255, 0.12);
+  }
+
+  .back-link {
+    color: var(--accent-glow);
+    text-decoration: none;
+    font-size: 0.85rem;
+    white-space: nowrap;
+  }
+  .back-link:hover { text-decoration: underline; }
+
+  .progress-track {
+    flex: 1;
+    height: 6px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 999px;
+    margin: 0 1rem;
+    overflow: hidden;
+  }
+
+  .progress-fill {
+    height: 100%;
+    width: 0%;
+    background: linear-gradient(90deg, var(--accent), var(--accent-glow));
+    box-shadow: 0 0 10px var(--accent-glow);
+    transition: width 0.4s ease;
+  }
+
+  .menu-toggle {
+    display: none;
+    background: transparent;
+    border: 1px solid rgba(124, 240, 255, 0.3);
+    color: var(--text-light);
+    border-radius: 10px;
+    padding: 0.4rem 0.7rem;
+    cursor: pointer;
+  }
+
+  .reader-layout {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    max-width: 1100px;
+    margin: 5.5rem auto 3rem;
+    gap: 2rem;
+    padding: 0 1.5rem;
+  }
+
+  .sidebar {
+    width: 260px;
+    flex-shrink: 0;
+    background: rgba(15, 30, 77, 0.55);
+    border: 1px solid rgba(124, 240, 255, 0.15);
+    border-radius: 18px;
+    padding: 1.4rem;
+    backdrop-filter: blur(8px);
+    position: sticky;
+    top: 5.5rem;
+    align-self: flex-start;
+    max-height: 72vh;
+    overflow-y: auto;
+  }
+
+  .sidebar-title {
+    font-family: "Zen Maru Gothic", sans-serif;
+    font-size: 1.2rem;
+    margin: 0;
+  }
+
+  .sidebar-sub {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    margin: 0.2rem 0 1rem;
+  }
+
+  .episode-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 0.2rem; }
+
+  .episode-item {
+    padding: 0.6rem 0.5rem;
+    border-radius: 10px;
+    display: flex;
+    gap: 0.6rem;
+    align-items: baseline;
+    cursor: pointer;
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    transition: background 0.2s, color 0.2s;
+  }
+  .episode-item:hover { background: rgba(124, 240, 255, 0.08); color: var(--text-light); }
+  .episode-item.active {
+    background: linear-gradient(90deg, rgba(46, 196, 255, 0.25), transparent);
+    color: var(--accent-glow);
+    font-weight: 600;
+  }
+  .episode-item:focus-visible { outline: 2px solid var(--accent-glow); outline-offset: 2px; }
+
+  .ep-number {
+    font-family: "Zen Maru Gothic", sans-serif;
+    font-size: 0.75rem;
+    opacity: 0.7;
+    flex-shrink: 0;
+  }
+
+  .reading-panel {
+    flex: 1;
+    background: rgba(11, 27, 77, 0.4);
+    border: 1px solid rgba(124, 240, 255, 0.12);
+    border-radius: 22px;
+    padding: 2.2rem clamp(1.2rem, 4vw, 3rem);
+    backdrop-filter: blur(6px);
+    min-height: 60vh;
+  }
+
+  .episode-number {
+    letter-spacing: 0.2em;
+    font-size: 0.7rem;
+    color: var(--accent-glow);
+    text-transform: uppercase;
+    margin: 0;
+  }
+
+  .episode-title {
+    font-family: "Zen Maru Gothic", sans-serif;
+    font-weight: 700;
+    font-size: clamp(1.6rem, 3.4vw, 2.2rem);
+    margin: 0.3rem 0 1.3rem;
+  }
+
+  .episode-body p {
+    line-height: 1.85;
+    color: rgba(240, 248, 255, 0.9);
+    margin-bottom: 1.1rem;
+    font-size: 1rem;
+  }
+
+  .episode-body.fade-out { opacity: 0; transform: translateY(6px); transition: opacity 0.22s, transform 0.22s; }
+  .episode-body.fade-in { opacity: 1; transform: translateY(0); transition: opacity 0.4s ease, transform 0.4s ease; }
+
+  .nav-buttons {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 2rem;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+
+  .nav-btn {
+    padding: 0.7rem 1.4rem;
+    border-radius: 999px;
+    border: 1px solid rgba(124, 240, 255, 0.3);
+    background: transparent;
+    color: var(--text-light);
+    font-family: "Poppins", sans-serif;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: background 0.2s, box-shadow 0.2s;
+  }
+  .nav-btn:hover:not(:disabled) { background: rgba(124, 240, 255, 0.12); }
+  .nav-btn:disabled { opacity: 0.35; cursor: not-allowed; }
+  .nav-btn:focus-visible { outline: 2px solid var(--accent-glow); outline-offset: 2px; }
+
+  .nav-btn.primary {
+    background: linear-gradient(90deg, var(--accent-glow), var(--accent));
+    color: var(--bg-deep);
+    border: none;
+    font-weight: 600;
+    box-shadow: 0 0 18px rgba(46, 196, 255, 0.4);
+  }
+
+  @media (max-width: 800px) {
+    .reader-layout { flex-direction: column; margin-top: 4.6rem; }
+    .sidebar {
+      position: fixed;
+      left: 0; top: 0; bottom: 0;
+      width: 78%;
+      max-width: 300px;
+      z-index: 50;
+      transform: translateX(-100%);
+      transition: transform 0.35s ease;
+      border-radius: 0 18px 18px 0;
+      max-height: 100vh;
+    }
+    .sidebar.open { transform: translateX(0); box-shadow: 0 0 40px rgba(0, 0, 0, 0.5); }
+    .menu-toggle { display: inline-flex; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .bg-aurora, .particle { animation: none !important; }
+  }
+</style>
+</head>
+<body>
+  <div class="iris-overlay" id="irisOverlay"></div>
+  <div class="bg-aurora"></div>
+  <div class="particles" id="particles"></div>
+
+  <div class="top-bar">
+    <a href="index.html" class="back-link">← Beranda</a>
+    <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+    <button class="menu-toggle" id="menuToggle" aria-label="Daftar episode">☰</button>
+  </div>
+
+  <div class="reader-layout">
+    <aside class="sidebar" id="sidebar">
+      <h2 class="sidebar-title">Biru Senja</h2>
+      <p class="sidebar-sub">12 Episode</p>
+      <ul class="episode-list" id="episodeList"></ul>
+    </aside>
+
+    <main class="reading-panel" id="readingPanel">
+      <p class="episode-number" id="episodeNumber">EPISODE 01</p>
+      <h1 class="episode-title" id="episodeTitle"></h1>
+      <div class="episode-body" id="episodeBody"></div>
+      <div class="nav-buttons">
+        <button id="prevBtn" class="nav-btn">← Sebelumnya</button>
+        <button id="nextBtn" class="nav-btn primary">Episode Selanjutnya →</button>
+      </div>
+    </main>
+  </div>
+
+  <script src="book.js"></script>
+</body>
+</html>
